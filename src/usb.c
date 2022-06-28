@@ -153,14 +153,14 @@ void usb_receive_control(void* d, uint8_t len) {
 
 void usb_init(usb_device_configuration* device_configuration) {
 	udc = device_configuration;
-	IDENTIFY_LED_MODE;
-	READY_LED_MODE;
-	READ_LED_MODE;
-	WRITE_LED_MODE;
-	IDENTIFY_LED_OFF;
-	READY_LED_OFF;
-	READ_LED_OFF;
-	WRITE_LED_OFF;
+//	IDENTIFY_LED_MODE;
+//	READY_LED_MODE;
+//	READ_LED_MODE;
+//	WRITE_LED_MODE;
+//	IDENTIFY_LED_OFF;
+//	READY_LED_OFF;
+//	READ_LED_OFF;
+//	WRITE_LED_OFF;
 //	usb_configuration = 0;
 //	usb_suspended = FALSE;
 //	usb_status = 0;
@@ -236,7 +236,7 @@ ISR(USB_COM_vect) {
 		} else if (r == GET_DESCRIPTOR) {
 			res = (*udc->usb_descriptor_func)(&received_setup);
 		} else if (r == SET_CONFIGURATION && (t & REQUEST_RECIPIENT) == REQUEST_DEVICE) {
-			READY_LED_ON;
+//			READY_LED_ON;
 			init_endpoint(1, EP_TYPE_BULK_IN, EP_DOUBLE_64);
 			init_endpoint(2, EP_TYPE_BULK_OUT, EP_DOUBLE_64);
 			UERST = 0x7E;
@@ -315,20 +315,20 @@ ISR(USB_GEN_vect) {
 		if(write_blinks) {
 			if(!write_blink_counter) {
 				write_blinks--;
-				WRITE_LED_FLIP;
+//				WRITE_LED_FLIP;
 			}
 			write_blink_counter = (write_blink_counter + 1) & BLINK_TIME;
 		}else{
-			WRITE_LED_OFF;
+//			WRITE_LED_OFF;
 		}
 		if(read_blinks) {
 			if(!read_blink_counter) {
 				read_blinks--;
-				READ_LED_FLIP;
+//				READ_LED_FLIP;
 			}
 			read_blink_counter = (read_blink_counter + 1) & BLINK_TIME;
 		}else{
-			READ_LED_OFF;
+//			READ_LED_OFF;
 		}
 	}
 // See above, it was impossible to get the datasheet adviced clock switching to work

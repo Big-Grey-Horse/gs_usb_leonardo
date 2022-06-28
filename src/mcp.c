@@ -42,8 +42,8 @@ uint8_t mcp_buf_out[13];
 uint8_t mcp_err_flags;
 uint8_t mcp_cnfs[3];
 
-#define mcp_select()	(PORTB &= 0xFE)
-#define mcp_unselect()	(PORTB |= 0x01)
+#define mcp_select()	(PORTD &= 0xEF)
+#define mcp_unselect()	(PORTD |= 0x10)
 
 void mcp_reset_spi() {
 	register uint8_t _sreg = SREG;
@@ -198,9 +198,14 @@ void mcp_set_mode_listen() {
 }
 
 uint8_t mcp_begin(uint8_t use_rb2) {
-	DDRB |= 0x01;
+	register uint8_t _sreg = SREG;
+	DDRD |= 0x10;
 	mcp_unselect();
-	spi_init();
+	cli();
+	SPCR = (1 << SPE) | (1 << MSTR) /*| (SPI_MODE0 & SPI_MODE_MASK) */ /* | ((clockDiv >> 1) & SPI_CLOCK_MASK) */;
+	SPSR = (0x01 & SPI_2XCLOCK_MASK);
+	DDRB |= 0x06;
+	SREG = _sreg;
 	return mcp_init(use_rb2);
 }
 
@@ -329,3 +334,27 @@ uint8_t mcp_init_filt(uint8_t num, uint8_t ext, uint32_t data) {
 	}
 	return mcp_set_ctrl_mode(mcp_device_mode);
 }
+/* Compactified SPI functionality */
+
+
+
+inline uint8_t spi_transfer8(uint8_t data) {
+	SPDR = data;
+	asm volatile("nop");
+	while (!(SPSR & (1 << SPIF)));
+	return SPDR;
+}
+
+inline void spi_transfer(uint8_t *p, uint8_t count) {
+	SPDR = *p;
+	while (--count) {
+		uint8_t out = *(p + 1);
+		while (!(SPSR & (1 << SPIF)));
+		uint8_t in = SPDR;
+		SPDR = out;
+		*p++ = in;
+	}
+	while (!(SPSR & (1 << SPIF)));
+	*p = SPDR;
+}
+

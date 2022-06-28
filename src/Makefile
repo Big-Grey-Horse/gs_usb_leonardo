@@ -17,7 +17,7 @@ endif
 
 CFLAGS = -mmcu=atmega32u4 -Os -ffunction-sections -fdata-sections -flto
 LDFLAGS = -mmcu=atmega32u4 -fuse-linker-plugin -Wl,--gc-sections
-OBJ_FILES = spi.o mcp.o usb.o gs_usb.o mcp_gs.o main.o
+OBJ_FILES = mcp.o usb.o gs_usb.o mcp_gs.o main.o
 ELF_FILE = gs_usb_leonardo.elf
 HEX_FILE = gs_usb_leonardo.hex
 

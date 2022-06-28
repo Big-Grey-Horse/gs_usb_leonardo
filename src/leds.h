@@ -31,7 +31,17 @@
 #define LEDS_H
 
 #include <avr/io.h>
-
+// PB0
+#define POWER_LED_MODE		(DDRD |= 0x20)
+#define POWER_LED_ON		(PORTD |= 0x20)
+#define POWER_LED_OFF		(PORTD &= 0xDF)
+#define POWER_LED_FLIP		(PORTD ^= 0x20)
+// PD5 - This is the built-in LED
+#define IDENTIFY_LED_MODE	(DDRB |= 0x01)
+#define IDENTIFY_LED_ON		(PORTB |= 0x01)
+#define IDENTIFY_LED_OFF	(PORTB &= 0xFE)
+#define IDENTIFY_LED_FLIP	(PORTB ^= 0x01)
+/*
 // PD7
 #define POWER_LED_MODE		(DDRD |= 0x80)
 #define POWER_LED_ON		(PORTD |= 0x80)
@@ -61,5 +71,5 @@
 #define READ_LED_ON		(PORTD |= 0x40)
 #define READ_LED_OFF		(PORTD &= 0xBF)
 #define READ_LED_FLIP		(PORTD ^= 0x40)
-
+*/
 #endif

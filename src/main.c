@@ -173,6 +173,8 @@ void main() {
 	EICRB = (EICRB & ~((1<<ISC60) | (1<<ISC61))) | (2 << ISC60);
 	POWER_LED_MODE;
 	POWER_LED_ON;
+	IDENTIFY_LED_MODE;
+	IDENTIFY_LED_OFF;
 repeat_main:
 	clear_data();
 	EIMSK &= ~(1<<INT6);
